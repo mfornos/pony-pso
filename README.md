@@ -4,7 +4,8 @@ Particle swarm optimization (PSO) is a population based stochastic optimization 
 
 # Building
 
-Execute `./build.sh`, and you will find the compiled example programs in the `bin/` folder.
+Execute `./build.sh` to compile all the examples. 
+You will find the executables in the `bin/` folder.
 
 ## Dependencies
 
