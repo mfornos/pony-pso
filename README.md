@@ -4,11 +4,9 @@ Particle swarm optimization (PSO) is a population based stochastic optimization 
 
 # Building
 
-## Dependencies
+This software depends on [ponyc](http://www.ponylang.org/) version 0.2.1, the Pony language compiler.
 
-- [ponyc](http://www.ponylang.org/) 0.2.1
-
-Execute `./build.sh` to compile all the examples. 
+Execute `./build.sh` to compile all the examples.
 You will find the executables in the `bin/` folder.
 
 # Example
