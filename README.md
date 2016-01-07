@@ -1,4 +1,4 @@
-# Pony package for particle swarm optimization (PSO).
+# Pony package for particle swarm optimization
 
 Particle swarm optimization (PSO) is a population based stochastic optimization technique developed by Dr. Eberhart and Dr. Kennedy  in 1995, inspired by social behavior of bird flocking or fish schooling.
 
@@ -20,13 +20,13 @@ f(x) = Sum(x[]^2)
 
 Execution Results
 -----------------
-Best:		0
-X1:		0
-X2:		0
-X3:		0
-X4:		0
-Epoch:		9
-Reason:	Target
+Best:           0
+X1:             0
+X2:             0
+X3:             0
+X4:             0
+Epoch:          9
+Reason:         Target
 ```
 
 # References
