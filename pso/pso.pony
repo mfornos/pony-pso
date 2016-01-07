@@ -2,7 +2,7 @@
 # Particle swarm optimization (PSO) package.
 
 A population based stochastic optimization technique 
-developed by Dr. Eberhart and Dr. Kennedy  in 1995, 
+developed by Dr. Eberhart and Dr. Kennedy in 1995, 
 inspired by social behavior of bird flocking or fish schooling.
 """
 use "time"
@@ -63,7 +63,7 @@ class SwarmParams
 
   - c1: Cognitive factor. Usually c1 equals to c2 and ranges from [0, 4].
   - c2:  Social factor.
-  - w: Inertia weight. Typically ranges from [0, 1] , where 0 means no inertia.
+  - w: Inertia weight. Typically ranges from [0, 1], where 0 means no inertia.
   - max: Maximum values of the search space.
   - min: Minimum values of the search space.
   - particles: Number of particles.  The typical range is [20, 40].
