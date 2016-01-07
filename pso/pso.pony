@@ -3,7 +3,7 @@
 
 A population based stochastic optimization technique 
 developed by Dr. Eberhart and Dr. Kennedy  in 1995, 
-inspired by social behavior of bird flockin or fish schooling.
+inspired by social behavior of bird flocking or fish schooling.
 """
 use "time"
 use "random"
