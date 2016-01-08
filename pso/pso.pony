@@ -191,14 +191,13 @@ class _Particle
     - rand () is a random number between (0,1).
     - c1, c2 are learning factors. usually c1 = c2 = 2.
 
-    ## Dissipative factors
+    ## Dissipative Factors
 
     The chaos introduces the negative entropy from outer environment, which will keep the system
     in far-from-equilibrium state.
 
     3. Scatter velocity after (1) according to chaos factor:
     `IF rand() < cv THEN v[] = rand() * vmax[]`
-
     4. Scatter location after (2) according to chaos factor:
     `IF rand() < cl THEN x[] = rand(-max[], max[])`
     """
