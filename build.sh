@@ -35,7 +35,7 @@ while getopts ":de" opt; do
     e)
       build::examples
       ;;
-    \?)
+    [?])
       usage
       ;;
   esac
