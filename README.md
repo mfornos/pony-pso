@@ -86,7 +86,7 @@ Reason:         Target
 
 # References
 
-[1] J. Kennedy, R. Eberhart, “Particle swarm optimization,” Proc. IEEE Int. Conf. on Neural Networks, pp. 1942-1948, 1995.
+[1] J. Kennedy and R. C. Eberhart. “Particle swarm optimization,” Proc. IEEE Int. Conf. on Neural Networks, pp. 1942-1948, 1995.
 
-[2] Xiao-Feng Xie; Wen-Jun Zhang; Zhi-Lian Yang, “Dissipative particle swarm optimization,” in Evolutionary Computation, 2002. CEC '02. Proceedings of the 2002 Congress on , vol.2, no., pp.1456-1461, 2002
+[2] Xiao-Feng Xie, Wen-Jun Zhang and Zhi-Lian Yang. “Dissipative particle swarm optimization,” in Evolutionary Computation, 2002. CEC '02. Proceedings of the 2002 Congress on , vol.2, no., pp.1456-1461, 2002
 
