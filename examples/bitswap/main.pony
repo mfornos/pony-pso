@@ -17,6 +17,8 @@ actor Main
       p.precision = 0
       p.c1 = 2
       p.c2 = 2
+      p.cl = 0.002
+      p.cv = 0.001
       consume p
     end
 
