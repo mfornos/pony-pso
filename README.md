@@ -2,7 +2,39 @@
 
 Particle swarm optimization (PSO) is a population based stochastic optimization technique developed by Dr. Eberhart and Dr. Kennedy  in 1995, inspired by social behavior of bird flocking or fish schooling.
 
-Supported parameters:
+# Building
+
+This software depends on [ponyc](http://www.ponylang.org/) version 0.2.1, the Pony language compiler.
+
+Execute `./build.sh -e` to compile all the examples.
+You will find the executables in the `bin/` folder.
+
+# Usage
+
+```pony
+use "pso"
+
+actor Main
+  new create(env: Env) =>
+
+    let params = recover val
+        let p = SwarmParams(2)
+        p.max = [5000, 5000]
+        p.min = [-5000, -5000]
+        consume p
+    end
+
+    let sw = Swarm(params,
+        SwarmLog(env),
+        object is FitnessFunc
+            fun apply(x: Array[F64]): F64 ? =>
+                (x(0) - 200).abs() + (x(1) - 200).abs()
+        end)
+
+    sw.solve()
+```
+
+## Supported Parameters
 
 <dl>
   <dt>c1</dt><dd>Cognitive factor. Usually c1 equals to c2 and ranges from [0, 4].</dd>
@@ -24,13 +56,6 @@ Supported parameters:
   <dt>target</dt><dd>Target cost value for the optimization problem. Stop condition.</dd>
   <dt>iterations</dt><dd>Maximum number of iterations. Stop condition.</dd>
 </dl>
-
-# Building
-
-This software depends on [ponyc](http://www.ponylang.org/) version 0.2.1, the Pony language compiler.
-
-Execute `./build.sh -e` to compile all the examples.
-You will find the executables in the `bin/` folder.
 
 # Example
 
