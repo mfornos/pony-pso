@@ -65,9 +65,10 @@ For some difficult or special problems, one can try 100 or 200 particles as well
 
 `iterations` : Maximum number of iterations. Stop condition.
 
-# Example
+# Examples
 
-Running `bin/simple` will print an output close to this:
+Take a look to the source code in the [examples/](https://github.com/mfornos/pony-pso/tree/master/examples) folder.
+V.g., running `bin/simple` will print an output close to this:
 
 ```
 PSO Sphere function
