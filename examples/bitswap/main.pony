@@ -13,7 +13,6 @@ actor Main
       let siz = t.size()
       let p = SwarmParams(siz)
       p.max = Array[F64].init(255, siz)
-      p.max_stag = 100
       p.particles = 200
       p.precision = 0
       p.c1 = 2
