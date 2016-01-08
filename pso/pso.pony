@@ -171,7 +171,7 @@ class _Particle
     _max = Array[F64].init(0, dims)
     _min = Array[F64].init(0, dims)
     _init_maxs()
-    randomize()
+    _randomize()
 
   fun ref epoch() =>
     """
@@ -234,7 +234,7 @@ class _Particle
     end
     _adjust_fitness()
 
-  fun ref randomize() =>
+  fun ref _randomize() =>
     """
     Randomizes the state of this particle.
     """
