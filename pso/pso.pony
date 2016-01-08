@@ -1,5 +1,5 @@
 """
-# Particle swarm optimization (PSO) package.
+# Particle Swarm Optimization (PSO) package.
 
 An impelementation of the Particle Swarm Optimization algorithm with support
 for dissipative variations. PSO is a population based global stochastic optimization
