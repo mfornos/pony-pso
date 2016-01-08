@@ -1,6 +1,7 @@
 # Pony package for particle swarm optimization
 
-Particle swarm optimization (PSO) is a population based stochastic optimization technique developed by Dr. Eberhart and Dr. Kennedy  in 1995, inspired by social behavior of bird flocking or fish schooling.
+An impelementation of the Particle Swarm Optimization algorithm in Pony, with support for dissipative variations.
+PSO is a population based global stochastic optimization technique inspired by social behavior of bird flocking or fish schooling.
 
 # Building
 
