@@ -197,9 +197,9 @@ class _Particle
     in far-from-equilibrium state.
 
     3. Scatter velocity after (1) according to chaos factor:
-    `IF rand() < cv THEN v[] = rand() * vmax[]`
+      `IF rand() < cv THEN v[] = rand() * vmax[]`
     4. Scatter location after (2) according to chaos factor:
-    `IF rand() < cl THEN x[] = rand(-max[], max[])`
+      `IF rand() < cl THEN x[] = rand(-max[], max[])`
     """
     for i in Range(0, _x.size()) do
       let rp = _rand.next()
@@ -235,9 +235,6 @@ class _Particle
     _adjust_fitness()
 
   fun ref _randomize() =>
-    """
-    Randomizes the state of this particle.
-    """
     let s = _x.size()
     for i in Range(0, s) do
       try
