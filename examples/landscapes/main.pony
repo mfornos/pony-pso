@@ -7,9 +7,9 @@ actor Main
 
     sphere(env)
     booth(env)
-    mccorm(env) 
+    schwefel(env) 
 
-fun mccorm(env: Env) =>
+fun schwefel(env: Env) =>
      env.out.print(
       """
       Schwefel function:
@@ -21,9 +21,13 @@ fun mccorm(env: Env) =>
       let p = SwarmParams(2)
       p.max = Array[F64].init(500, 2)
       p.min = Array[F64].init(-500, 2)
-      p.target = 0.000025459
+      p.vmax = Array[F64].init(10, 2)
       p.precision = 4
+      p.cv = 0.001
+      p.cl = 0.002
+      p.target = 0.000025459
       p.particles = 100
+      p.stagnation = 500
       consume p
     end
 

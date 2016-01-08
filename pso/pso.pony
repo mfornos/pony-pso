@@ -62,25 +62,27 @@ class SwarmParams
   Swarm parameters.
 
   - c1: Cognitive factor. Usually c1 equals to c2 and ranges from [0, 4].
-  - c2:  Social factor.
+  - c2: Social factor.
+  - cv: Chaos velocity factor, in the range [0, 1].
+  - cl: Chaos location factor, in the range [0, 1].
   - w: Inertia weight. Typically ranges from [0, 1], where 0 means no inertia.
   - max: Maximum values of the search space.
   - min: Minimum values of the search space.
-  - particles: Number of particles.  The typical range is [20, 40].
+  - vmax: Maximum velocity.
+  - particles: Number of particles. Typical range is [20, 40].
      Actually for most of the problems 10 particles is large enough to get good results. 
      For some difficult or special problems, one can try 100 or 200 particles as well.
   - precision: Number of decimal figures per dimension. Set -1 for unbounded decimals.
-  - max_stag:  Maximum iterations without a global fit.
-    When reached some particles will be randomized.
+  - stagnation:  Maximum iterations without a global fit. Stop condition.
   - target: Target cost value for the optimization problem. Stop condition.
-  - max_iters: Maximum number of iterations. Stop condition.
+  - iterations: Maximum number of iterations. Stop condition.
 
   Example usage:
   ```
     let params = recover val
       let p = SwarmParams(2)
       p.max = [100, 100]
-      p.max_stag = 100
+      p.stagnation = 100
       p.c1 = 1.5
       consume p
     end
@@ -88,14 +90,17 @@ class SwarmParams
   """
   var max: Array[F64]
   var min: Array[F64]
+  var vmax: Array[F64]
   var target: F64 = 0
-  var max_stag: U64 = 30
+  var stagnation: U64 = 100
   var particles: U64 = 50
-  var max_iters: U64 = 1500
+  var iterations: U64 = 1500
   var precision: F64 = -1
   var w: F64 = 0
   var c1: F64 = 0.5
   var c2: F64 = 0.5
+  var cv: F64 = -1
+  var cl: F64 = -1
   let dims: U64
 
   new create(dims': U64) =>
@@ -106,12 +111,14 @@ class SwarmParams
     dims = dims'
     max = Array[F64].init(200, dims)
     min = Array[F64].init(0, dims)
+    vmax = Array[F64].init(-1, dims)
 
 primitive Reason
   """
   Stop reasons.
   """
   fun target(): String => "Target"
+  fun stagnation(): String => "Stagnation"
   fun iterations(): String => "Iterations"
   fun unknown(): String => "Unknown"
 
@@ -124,7 +131,8 @@ class Rand
     _rand = MT(Time.nanos())
   fun ref next(): F64 =>
     _rand.next().f64() / U64.max_value().f64()
-
+  fun ref between(min: F64, max: F64): F64 =>
+    next() * ((max - min) + min)
 
 class _Particle
   """
@@ -135,17 +143,23 @@ class _Particle
   let _x: Array[F64]
   let _v: Array[F64]
   let _vmax: Array[F64]
+  let _max: Array[F64]
+  let _min: Array[F64]
   let _rand: Rand = Rand
   let _fitness: FitnessFunc
   let _s: Swarm ref
   let _c1: F64
   let _c2: F64
+  let _cv: F64
+  let _cl: F64
   let _w: F64
   let _precision: F64
 
   new create(s: Swarm ref, fitness: FitnessFunc) =>
     _c1 = s.params.c1
     _c2 = s.params.c2
+    _cv = s.params.cv
+    _cl = s.params.cl
     _w = s.params.w
     _precision = s.params.precision
     _fitness = fitness
@@ -155,6 +169,9 @@ class _Particle
     _p = Array[F64].init(0, dims)
     _v = Array[F64].init(0, dims)
     _vmax = Array[F64].init(0, dims)
+    _max = Array[F64].init(0, dims)
+    _min = Array[F64].init(0, dims)
+    _init_maxs()
     randomize()
 
   fun ref epoch() =>
@@ -180,12 +197,26 @@ class _Particle
         let x = _x(i)
         let p = _p(i)
         let g = _s.g(i)
+        let vmax = _vmax(i)
+        let max = _max(i)
+
         var v' = (_w *_v(i)) + (_c1 * rp * (p - x)) + (_c2 * rg * (g - x))
-        v' = _signbit(v') * (v'.abs().min(_vmax(i)))
+        v' = _clamp(v', vmax)
+
+        if (_cv > -1) and (_rand.next() < _cv) then
+          v' = _rand.next() * vmax
+        end
+
         var x' = x + v'
+
+        if (_cl > -1) and (_rand.next() < _cl) then
+          x' = _rand.between(-max, max)
+        end
+
         if _precision > -1 then 
           x' = _round_to(x', _precision) 
         end
+
         _x(i) = x'
         _v(i) = v'
       end
@@ -196,15 +227,12 @@ class _Particle
     """
     Randomizes the state of this particle.
     """
-    let max = _s.params.max
-    let min = _s.params.min
     let s = _x.size()
     for i in Range(0, s) do
       try
-        _vmax(i) = max(i).abs() + min(i).abs()
-        _x(i) = ((max(i) - min(i)) * _rand.next())  + min(i)
+        _x(i) = ((_max(i) - _min(i)) * _rand.next())  + _min(i)
         _p(i) = _x(i)
-        _v(i) = 2* _vmax(i) * (_rand.next() - 0.5)
+        _v(i) = 2 * _vmax(i) * (_rand.next() - 0.5)
       end
     end
     best = _eval_fitness(_p)
@@ -226,8 +254,25 @@ class _Particle
       U64.max_value().f64()
     end
 
+  fun _clamp(a: F64, b: F64): F64 =>
+    _signbit(a) * a.abs().min(b)
+
+  fun ref _init_maxs() =>
+    let s = _vmax.size()
+    _s.params.vmax.copy_to(_vmax, 0, 0, s)
+    _s.params.max.copy_to(_max, 0, 0, s)
+    _s.params.min.copy_to(_min, 0, 0, s)
+    for i in Range(0, s) do
+      try
+        if _vmax(i) < 0 then
+          _vmax(i) = _max(i).abs() + _min(i).abs()
+        end
+      end
+    end
+
   fun _signbit(n: F64): F64 =>
     if n < 0 then -1 elseif n > 0 then 1 else 0 end
+
   fun _round_to(n: F64, p: F64): F64 =>
     let m = F64(10).pow(p)
     let mn = m * n
@@ -296,7 +341,6 @@ actor Swarm
 
       if not _updated then
         _stagnation = _stagnation + 1
-        _update_stag()
       end
 
       _epoch = _epoch + 1
@@ -327,21 +371,14 @@ actor Swarm
       return false
     end
 
-    if _epoch >= params.max_iters then
+    if _epoch >= params.iterations then
       reason = Reason.iterations()
       return false
     end
 
-    true
-
-  fun ref _update_stag() =>
-    if _stagnation >= params.max_stag then
-      let r = Rand
-      for p in _particles.values() do
-        let th = _epoch.f64() / params.max_iters.f64()
-        if  r.next() > th then
-          p.randomize()
-        end
-      end
-      _stagnation = 0
+    if _stagnation >= params.stagnation then
+      reason = Reason.stagnation()
+      return false
     end
+
+    true
