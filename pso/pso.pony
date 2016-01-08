@@ -177,6 +177,8 @@ class _Particle
     """
     Runs an epoch for this particle.
 
+    # PSO Algorithm
+
     1. Calculate particle velocity according:
        `v[] = (w * v[]) + c1 * rand() * (pbest[] - x[]) + c2 * rand() * (gbest[] - x[])`
     2. Update particle position according:
@@ -188,6 +190,17 @@ class _Particle
     - pbest[] and gbest[] are the particle best fitness and the global best fitness respectively.
     - rand () is a random number between (0,1).
     - c1, c2 are learning factors. usually c1 = c2 = 2.
+
+    ## Dissipative factors
+
+    The chaos introduces the negative entropy from outer environment, which will keep the system
+    in far-from-equilibrium state.
+
+    3. Scatter velocity after (1) according to chaos factor:
+    `IF rand() < cv THEN v[] = rand() * vmax[]`
+
+    4. Scatter location after (2) according to chaos factor:
+    `IF rand() < cl THEN x[] = rand(-max[], max[])`
     """
     for i in Range(0, _x.size()) do
       let rp = _rand.next()
