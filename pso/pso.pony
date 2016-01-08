@@ -1,9 +1,9 @@
 """
 # Particle swarm optimization (PSO) package.
 
-A population based stochastic optimization technique
-developed by Dr. Eberhart and Dr. Kennedy in 1995,
-inspired by social behavior of bird flocking or fish schooling.
+An impelementation of the Particle Swarm Optimization algorithm with support
+for dissipative variations. PSO is a population based global stochastic optimization
+technique inspired by social behavior of bird flocking or fish schooling.
 """
 use "time"
 use "random"
@@ -197,9 +197,9 @@ class _Particle
     in far-from-equilibrium state.
 
     3. Scatter velocity after (1) according to chaos factor:
-      `IF rand() < cv THEN v[] = rand() * vmax[]`
+       `IF rand() < cv THEN v[] = rand() * vmax[]`
     4. Scatter location after (2) according to chaos factor:
-      `IF rand() < cl THEN x[] = rand(-max[], max[])`
+       `IF rand() < cl THEN x[] = rand(-max[], max[])`
     """
     for i in Range(0, _x.size()) do
       let rp = _rand.next()
