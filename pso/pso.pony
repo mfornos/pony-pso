@@ -40,7 +40,6 @@ interface SwarmListener val
     """
     None
 
-
 class SwarmLog is SwarmListener
   """
   Listener that prints execution results to system out.
