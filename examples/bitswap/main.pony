@@ -38,7 +38,7 @@ class _F is FitnessFunc
 
 class _L is SwarmListener
   let _env: Env
-  new val create(env: Env) => 
+  new val create(env: Env) =>
     _env = env
   fun global_best(i: U64, gbest: F64, g: Array[F64]) =>
     _env.out.print(_to_str(g))

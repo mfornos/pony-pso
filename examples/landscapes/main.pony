@@ -7,7 +7,7 @@ actor Main
 
     sphere(env)
     booth(env)
-    schwefel(env) 
+    schwefel(env)
 
 fun schwefel(env: Env) =>
      env.out.print(
@@ -74,7 +74,7 @@ fun schwefel(env: Env) =>
 
     sw.solve()
 
-    
+
   fun sphere(env: Env) =>
     env.out.print(
       """

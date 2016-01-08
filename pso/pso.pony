@@ -1,8 +1,8 @@
 """
 # Particle swarm optimization (PSO) package.
 
-A population based stochastic optimization technique 
-developed by Dr. Eberhart and Dr. Kennedy in 1995, 
+A population based stochastic optimization technique
+developed by Dr. Eberhart and Dr. Kennedy in 1995,
 inspired by social behavior of bird flocking or fish schooling.
 """
 use "time"
@@ -70,10 +70,10 @@ class SwarmParams
   - min: Minimum values of the search space.
   - vmax: Maximum velocity.
   - particles: Number of particles. Typical range is [20, 40].
-     Actually for most of the problems 10 particles is large enough to get good results. 
-     For some difficult or special problems, one can try 100 or 200 particles as well.
+      Actually for most of the problems 10 particles is large enough to get good results.
+      For some difficult or special problems, one can try 100 or 200 particles as well.
   - precision: Number of decimal figures per dimension. Set -1 for unbounded decimals.
-  - stagnation:  Maximum iterations without a global fit. Stop condition.
+  - stagnation: Maximum iterations without a global fit. Stop condition.
   - target: Target cost value for the optimization problem. Stop condition.
   - iterations: Maximum number of iterations. Stop condition.
 
@@ -182,7 +182,7 @@ class _Particle
        `v[] = (w * v[]) + c1 * rand() * (pbest[] - x[]) + c2 * rand() * (gbest[] - x[])`
     2. Update particle position according:
        `x[] = x[] + v[]`
-    
+
     Where:
 
     - v[] is the particle velocity, x[] is the current particle (solution).
@@ -213,8 +213,8 @@ class _Particle
           x' = _rand.between(-max, max)
         end
 
-        if _precision > -1 then 
-          x' = _round_to(x', _precision) 
+        if _precision > -1 then
+          x' = _round_to(x', _precision)
         end
 
         _x(i) = x'
@@ -315,7 +315,7 @@ actor Swarm
   var _stagnation: U64 = 0
   var _epoch: U64 = 0
 
-  new create(params': SwarmParams val, listener: SwarmListener, 
+  new create(params': SwarmParams val, listener: SwarmListener,
     fitness: FitnessFunc)
   =>
     params = params'
@@ -346,7 +346,7 @@ actor Swarm
       _epoch = _epoch + 1
       _updated = false
     end
-    
+
     _listener.results(_epoch, _gbest, g, reason)
 
   fun ref update(x: Array[F64], best: F64) =>
