@@ -68,7 +68,7 @@ For some difficult or special problems, one can try 100 or 200 particles as well
 
 # Examples
 
-Take a look to the source code in the [examples/](https://github.com/mfornos/pony-pso/tree/master/examples) folder; v.g., running `bin/sphere` will print an output close to this:
+Take a look to the source code in the [examples/](https://github.com/mfornos/pony-pso/tree/master/examples) folder; v.g., running `bin/sphere` solves the sphere problem for 60 dimensions and prints an output close to this:
 
 ```
 PSO Sphere function
@@ -81,7 +81,7 @@ X1:             0
 X2:             0
 X3:             0
 X4:             0
-[...]
+...
 X60:            0
 Epoch:          328
 Reason:         Target
