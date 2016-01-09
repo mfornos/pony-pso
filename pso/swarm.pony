@@ -15,14 +15,14 @@ class SwarmParams
   - c2: Social factor.
   - cv: Chaos velocity factor, in the range [0, 1].
   - cl: Chaos location factor, in the range [0, 1].
-  - inertia: Inertia weight function.
   - max: Maximum values of the search space.
   - min: Minimum values of the search space.
   - vmax: Maximum velocity.
   - particles: Number of particles. Typical range is [20, 40].
       Actually for most of the problems 10 particles is large enough to get good results.
       For some difficult or special problems, one can try 100 or 200 particles as well.
-  - precision: Number of decimal figures per dimension. Set -1 for unbounded decimals.
+  - precision: Number of decimal figures per dimension.
+  - inertia: Inertia weight function.
   - stagnation: Maximum iterations without a global fit. Stop condition.
   - target: Target cost value for the optimization problem. Stop condition.
   - iterations: Maximum number of iterations. Stop condition.
