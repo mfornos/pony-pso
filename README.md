@@ -60,11 +60,11 @@ For some difficult or special problems, one can try 100 or 200 particles as well
 
 `inertia` : Inertia weight function.
 
-`stagnation` : Maximum iterations without a global fit. Stop condition.
+`stagnation` : Maximum iterations without a global fit. Termination condition.
 
-`target` : Target cost value for the optimization problem. Stop condition.
+`target` : Target cost value for the optimization problem. Termination condition.
 
-`iterations` : Maximum number of iterations. Stop condition.
+`iterations` : Maximum number of iterations. Termination condition.
 
 # Examples
 
