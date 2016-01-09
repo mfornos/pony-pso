@@ -8,7 +8,7 @@ interface InertiaFunc val
   """
   Contract for calculating the inertia weight.
   """
-  fun apply(iterations: U64, epoch: U64, pbest: F64, gbest: F64): F64
+  fun apply(p: _Particle): F64
 
 class ConstantWeight is InertiaFunc
   """
@@ -17,29 +17,36 @@ class ConstantWeight is InertiaFunc
   """
   let _c: F64
   new val create(c: F64 = 0) => _c = c
-  fun apply(i: U64, k: U64, p: F64, g: F64): F64 => _c
+  fun apply(p: _Particle): F64 => _c
 
 class LinearWeight is InertiaFunc
   """
+  Linear decreasing strategy.
   """
   let _max: F64
   let _min: F64
   new val create(min: F64, max: F64) =>
     _min = min
     _max = max
-  fun apply(iterations: U64, epoch: U64, pbest: F64, gbest: F64): F64
-  =>
-    let n = (_max - _min) / iterations.f64()
-    _max - (n * epoch.f64())
+  fun apply(p: _Particle): F64 =>
+    let iterations = p.swarm.params.iterations.f64()
+    let epoch = p.swarm.epoch.f64()
+    let n = (_max - _min) / iterations
+    _max - (n * epoch)
 
-class ChaoticRandom is InertiaFunc
+class Chaotic is InertiaFunc
   """
+  Chaotic inertia weight.
   """
-  let _d1: F64
-  let _d2: F64
-  new val create(d1: F64, d2: F64) =>
-    _d1 = d1
-    _d2 = d2
-  fun apply(iterations: U64, epoch: U64, pbest: F64, gbest: F64): F64
-  =>
-    4.0 * (0 * (1 - 0))
+  let _max: F64
+  let _min: F64
+  new val create(min: F64, max: F64) =>
+    _min = min
+    _max = max
+  fun apply(p: _Particle): F64 =>
+    let iters = p.swarm.params.iterations.f64()
+    let iter = p.swarm.epoch.f64()
+    let k = if p.hold_ctx == -1 then p.rand.next() else p.hold_ctx end
+    let k' = 4.0 * (k * (1 - k))
+    p.hold_ctx = k'
+    ((_max - _min) * ((iters - iter) / iters)) + (_min * k')

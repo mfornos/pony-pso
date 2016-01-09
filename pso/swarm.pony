@@ -77,33 +77,33 @@ class _Particle
   Represents a candidate solution.
   """
   var best: F64 = -1
+  let swarm: Swarm ref
+  let rand: Rand = Rand
+  var hold_ctx: F64 = -1
   var _p: Array[F64]
   let _x: Array[F64]
   let _v: Array[F64]
   let _vmax: Array[F64]
   let _max: Array[F64]
   let _min: Array[F64]
-  let _rand: Rand = Rand
   let _fitness: FitnessFunc
   let _wfunc: InertiaFunc
-  var _w: F64 = 0
-  let _s: Swarm ref
   let _c1: F64
   let _c2: F64
   let _cv: F64
   let _cl: F64
   let _precision: F64
 
-  new create(s: Swarm ref, fitness: FitnessFunc) =>
-    _c1 = s.params.c1
-    _c2 = s.params.c2
-    _cv = s.params.cv
-    _cl = s.params.cl
-    _wfunc = s.params.inertia
-    _precision = s.params.precision
+  new create(s': Swarm ref, fitness: FitnessFunc) =>
+    swarm = s'
+    _c1 = swarm.params.c1
+    _c2 = swarm.params.c2
+    _cv = swarm.params.cv
+    _cl = swarm.params.cl
+    _wfunc = swarm.params.inertia
+    _precision = swarm.params.precision
     _fitness = fitness
-    _s = s
-    let dims = s.params.dims
+    let dims = swarm.params.dims
     _x = Array[F64].init(0, dims)
     _p = Array[F64].init(0, dims)
     _v = Array[F64].init(0, dims)
@@ -142,27 +142,27 @@ class _Particle
        `IF rand() < cl THEN x[] = rand(-max[], max[])`
     """
     for i in Range(0, _x.size()) do
-      let rp = _rand.next()
-      let rg = _rand.next()
+      let rp = rand.next()
+      let rg = rand.next()
       try
         let x = _x(i)
         let p = _p(i)
-        let g = _s.g(i)
+        let g = swarm.g(i)
         let vmax = _vmax(i)
         let max = _max(i)
-        _w = _wfunc(_s.params.iterations, _s.epoch, best, _s.gbest, _w)
+        let w = _wfunc(this)
 
-        var v' = (_w *_v(i)) + (_c1 * rp * (p - x)) + (_c2 * rg * (g - x))
+        var v' = (w *_v(i)) + (_c1 * rp * (p - x)) + (_c2 * rg * (g - x))
         v' = _clamp(v', vmax)
 
-        if (_cv > -1) and (_rand.next() < _cv) then
-          v' = _rand.next() * vmax
+        if (_cv > -1) and (rand.next() < _cv) then
+          v' = rand.next() * vmax
         end
 
         var x' = x + v'
 
-        if (_cl > -1) and (_rand.next() < _cl) then
-          x' = _rand.between(-max, max)
+        if (_cl > -1) and (rand.next() < _cl) then
+          x' = rand.between(-max, max)
         end
 
         if _precision > -1 then
@@ -176,23 +176,23 @@ class _Particle
     _adjust_fitness()
 
   fun ref _randomize() =>
-    let s = _x.size()
-    for i in Range(0, s) do
+    let siz = _x.size()
+    for i in Range(0, siz) do
       try
-        _x(i) = ((_max(i) - _min(i)) * _rand.next())  + _min(i)
+        _x(i) = ((_max(i) - _min(i)) * rand.next())  + _min(i)
         _p(i) = _x(i)
-        _v(i) = 2 * _vmax(i) * (_rand.next() - 0.5)
+        _v(i) = 2 * _vmax(i) * (rand.next() - 0.5)
       end
     end
     best = _eval_fitness(_p)
-    _s.update(_x, best)
+    swarm.update(_x, best)
 
   fun ref _adjust_fitness() =>
     let fx = _eval_fitness(_x)
     if fx <  best then
       _p = _x
       best = fx
-      _s.update(_x, fx)
+      swarm.update(_x, fx)
     end
 
   fun _eval_fitness(n: Array[F64]) : F64 =>
@@ -207,11 +207,11 @@ class _Particle
     _signbit(a) * a.abs().min(b)
 
   fun ref _init_maxs() =>
-    let s = _vmax.size()
-    _s.params.vmax.copy_to(_vmax, 0, 0, s)
-    _s.params.max.copy_to(_max, 0, 0, s)
-    _s.params.min.copy_to(_min, 0, 0, s)
-    for i in Range(0, s) do
+    let siz = _vmax.size()
+    swarm.params.vmax.copy_to(_vmax, 0, 0, siz)
+    swarm.params.max.copy_to(_max, 0, 0, siz)
+    swarm.params.min.copy_to(_min, 0, 0, siz)
+    for i in Range(0, siz) do
       try
         if _vmax(i) < 0 then
           _vmax(i) = _max(i).abs() + _min(i).abs()

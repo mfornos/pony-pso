@@ -11,17 +11,17 @@ interface SwarmListener val
     - g: solution
     - r: termination reason
     """
-    None
+
   fun local_best(i: U64, pbest: F64, p: Array[F64]) =>
     """
     Invoked when a local best is found.
     """
-    None
+
   fun global_best(i: U64, gbest: F64, g: Array[F64]) =>
     """
     Invoked when a global best is found.
     """
-    None
+
 
 class SwarmLog is SwarmListener
   """

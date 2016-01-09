@@ -5,7 +5,6 @@ actor Main
   new create(env: Env) =>
     env.out.print( "PSO - Artificial landscapes")
 
-    sphere(env)
     booth(env)
     schwefel(env)
 
@@ -22,11 +21,12 @@ fun schwefel(env: Env) =>
       p.max = Array[F64].init(500, 2)
       p.min = Array[F64].init(-500, 2)
       p.vmax = Array[F64].init(10, 2)
+      // p.inertia = Chaotic(0.05, 0.07)
       p.precision = 4
       p.cv = 0.001
       p.cl = 0.002
       p.target = 0.000025459
-      p.particles = 100
+      p.particles = 50
       p.stagnation = 500
       consume p
     end
@@ -49,7 +49,7 @@ fun schwefel(env: Env) =>
      env.out.print(
       """
       Booth's function:
-      f(x,y) = ( x + 2y -7)^2 + (2x +y - 5)^2
+      f(x, y) = (x + 2y -7)^2 + (2x + y - 5)^2
       """
       )
 

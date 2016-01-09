@@ -1,6 +1,7 @@
 # Pony package for Particle Swarm Optimization
 
-An impelementation of the Particle Swarm Optimization algorithm[1] in Pony, with support for dissipative variations[2].
+An impelementation of the Particle Swarm Optimization algorithm[1] in Pony, with support for dissipative variations[2]
+and inertia weight strategies[3].
 PSO is a population based global stochastic optimization technique inspired by social behavior of bird flocking or fish schooling.
 
 # Building
@@ -92,3 +93,4 @@ Reason:         Target
 
 [2] Xiao-Feng Xie, Wen-Jun Zhang and Zhi-Lian Yang. “Dissipative particle swarm optimization,” in Evolutionary Computation, 2002. CEC '02. Proceedings of the 2002 Congress on , vol.2, no., pp.1456-1461, 2002
 
+[3] Bansal, J.C., Singh, P.K., Saraswat, M., Verma, A., Jadon, S.S. and Abraham, A. “Inertia Weight strategies in Particle Swarm Optimization,” in Nature and Biologically Inspired Computing (NaBIC), 2011 Third World Congress on , vol., no., pp.633-640, 19-21 Oct. 2011
