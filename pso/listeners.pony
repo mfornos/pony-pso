@@ -28,7 +28,10 @@ class SwarmLog is SwarmListener
   Listener that prints execution results to system out.
   """
   let _env: Env
-  new val create(env: Env) => _env = env
+
+  new val create(env: Env) =>
+    _env = env
+
   fun results(i: U64, gbest: F64, g: Array[F64], r: String) =>
     _env.out.print("Execution Results")
     _env.out.print("-----------------")

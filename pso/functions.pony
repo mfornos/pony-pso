@@ -8,7 +8,7 @@ interface InertiaFunc val
   """
   Contract for calculating the inertia weight.
   """
-  fun apply(iterations: U64, epoch: U64, w: F64, pbest: F64, gbest: F64): F64
+  fun apply(iterations: U64, epoch: U64, pbest: F64, gbest: F64): F64
 
 class ConstantWeight is InertiaFunc
   """
@@ -17,7 +17,7 @@ class ConstantWeight is InertiaFunc
   """
   let _c: F64
   new val create(c: F64 = 0) => _c = c
-  fun apply(i: U64, k: U64, w: F64, p: F64, g: F64): F64 => _c
+  fun apply(i: U64, k: U64, p: F64, g: F64): F64 => _c
 
 class LinearWeight is InertiaFunc
   """
@@ -27,12 +27,12 @@ class LinearWeight is InertiaFunc
   new val create(min: F64, max: F64) =>
     _min = min
     _max = max
-  fun apply(iterations: U64, epoch: U64, w: F64, pbest: F64, gbest: F64): F64
+  fun apply(iterations: U64, epoch: U64, pbest: F64, gbest: F64): F64
   =>
     let n = (_max - _min) / iterations.f64()
     _max - (n * epoch.f64())
 
-class SIF is InertiaFunc
+class ChaoticRandom is InertiaFunc
   """
   """
   let _d1: F64
@@ -40,6 +40,6 @@ class SIF is InertiaFunc
   new val create(d1: F64, d2: F64) =>
     _d1 = d1
     _d2 = d2
-  fun apply(iterations: U64, epoch: U64, w: F64, pbest: F64, gbest: F64): F64
+  fun apply(iterations: U64, epoch: U64, pbest: F64, gbest: F64): F64
   =>
-    4.0 * (w * (1 - w))
+    4.0 * (0 * (1 - 0))
