@@ -8,7 +8,7 @@ interface InertiaFunc val
   """
   Contract for calculating the inertia weight.
   """
-  fun apply(p: _Particle): F64
+  fun apply(p: Particle): F64
 
 class ConstantWeight is InertiaFunc
   """
@@ -17,7 +17,7 @@ class ConstantWeight is InertiaFunc
   """
   let _c: F64
   new val create(c: F64 = 0) => _c = c
-  fun apply(p: _Particle): F64 => _c
+  fun apply(p: Particle): F64 => _c
 
 class LinearWeight is InertiaFunc
   """
@@ -28,7 +28,7 @@ class LinearWeight is InertiaFunc
   new val create(min: F64, max: F64) =>
     _min = min
     _max = max
-  fun apply(p: _Particle): F64 =>
+  fun apply(p: Particle): F64 =>
     let iterations = p.swarm.params.iterations.f64()
     let epoch = p.swarm.epoch.f64()
     let n = (_max - _min) / iterations
@@ -43,7 +43,7 @@ class ChaoticWeight is InertiaFunc
   new val create(min: F64, max: F64) =>
     _min = min
     _max = max
-  fun apply(p: _Particle): F64 =>
+  fun apply(p: Particle): F64 =>
     let iters = p.swarm.params.iterations.f64()
     let iter = p.swarm.epoch.f64()
     let k = if p.hold_ctx == -1 then p.rand.next() else p.hold_ctx end

@@ -72,7 +72,7 @@ primitive Reason
   fun iterations(): String => "Iterations"
   fun unknown(): String => "Unknown"
 
-class _Particle
+class Particle
   """
   Represents a candidate solution.
   """
@@ -260,7 +260,7 @@ actor Swarm
   var epoch: U64 = 0
   var gbest: F64 = U64.max_value().f64()
   let _listener: SwarmListener
-  let _particles: Array[_Particle]
+  let _particles: Array[Particle]
   var _updated: Bool = false
   var _stagnation: U64 = 0
 
@@ -271,9 +271,9 @@ actor Swarm
     _listener = listener
     var pnum = params.particles
     g = Array[F64].init(0, params.dims)
-    _particles = Array[_Particle](pnum)
+    _particles = Array[Particle](pnum)
     while pnum > 0 do
-      _particles.push(_Particle(this, fitness))
+      _particles.push(Particle(this, fitness))
       pnum = pnum - 1
     end
 
