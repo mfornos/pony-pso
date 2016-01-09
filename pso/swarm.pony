@@ -23,9 +23,9 @@ class SwarmParams
       For some difficult or special problems, one can try 100 or 200 particles as well.
   - precision: Number of decimal figures per dimension.
   - inertia: Inertia weight function.
-  - stagnation: Maximum iterations without a global fit. Stop condition.
-  - target: Target cost value for the optimization problem. Stop condition.
-  - iterations: Maximum number of iterations. Stop condition.
+  - stagnation: Maximum iterations without a global fit. Termination condition.
+  - target: Target cost value for the optimization problem. Termination condition.
+  - iterations: Maximum number of iterations. Termination condition.
 
   Example usage:
   ```
@@ -47,8 +47,8 @@ class SwarmParams
   var iterations: U64 = 1500
   var precision: F64 = -1
   var inertia: InertiaFunc = ConstantWeight
-  var c1: F64 = 1.5
-  var c2: F64 = 1.5
+  var c1: F64 = 1.4944
+  var c2: F64 = 1.4944
   var cv: F64 = -1
   var cl: F64 = -1
   let dims: U64
