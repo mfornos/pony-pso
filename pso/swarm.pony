@@ -74,7 +74,9 @@ primitive Reason
 
 class Particle
   """
-  Represents a candidate solution.
+  A particle of the swarm. Described by its current position
+  in the search space, its velocity and a memory of its best
+  previous position.
   """
   var best: F64 = -1
   let swarm: Swarm ref
