@@ -15,7 +15,7 @@ class SwarmParams
   - c2: Social factor.
   - cv: Chaos velocity factor, in the range [0, 1].
   - cl: Chaos location factor, in the range [0, 1].
-  - inertia: Inertia function.
+  - inertia: Inertia weight function.
   - max: Maximum values of the search space.
   - min: Minimum values of the search space.
   - vmax: Maximum velocity.

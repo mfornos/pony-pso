@@ -46,7 +46,7 @@ actor Main
 
 `cl` : Chaos location factor, in the range [0, 1].
 
-`w` : Inertia weight. Typically ranges from [0, 1].
+`inertia` : Inertia weight function.
 
 `max` : Maximum values of the search space.
 
