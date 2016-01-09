@@ -5,56 +5,7 @@ An impelementation of the Particle Swarm Optimization algorithm with support
 for dissipative variations. PSO is a population based global stochastic optimization
 technique inspired by social behavior of bird flocking or fish schooling.
 """
-use "time"
-use "random"
 use "collections"
-
-interface FitnessFunc val
-  """
-  Contract for the cost function to be minimized.
-  """
-  fun apply(x: Array[F64]): F64 ?
-
-interface SwarmListener val
-  """
-  Receives notifications from the simulation.
-  """
-  fun results(i: U64, gbest: F64, g: Array[F64], r: String) =>
-    """
-    Invoked when a stop condition was triggered.
-
-    - i: iteration number
-    - gbest: lower cost (gbest)
-    - g: solution
-    - r: stop reason
-    """
-    None
-  fun local_best(i: U64, pbest: F64, p: Array[F64]) =>
-    """
-    Invoked when a local best is found.
-    """
-    None
-  fun global_best(i: U64, gbest: F64, g: Array[F64]) =>
-    """
-    Invoked when a global best is found.
-    """
-    None
-
-class SwarmLog is SwarmListener
-  """
-  Listener that prints execution results to system out.
-  """
-  let _env: Env
-  new val create(env: Env) => _env = env
-  fun results(i: U64, gbest: F64, g: Array[F64], r: String) =>
-    _env.out.print("Execution Results")
-    _env.out.print("-----------------")
-    _env.out.print("Best:\t\t" + gbest.string())
-    for (k, v) in g.pairs() do
-      _env.out.print("X" + (k + 1).string() + ":\t\t" + v.string())
-    end
-    _env.out.print("Epoch:\t\t" + i.string())
-    _env.out.print("Reason:\t\t" + r)
 
 class SwarmParams
   """
@@ -64,7 +15,7 @@ class SwarmParams
   - c2: Social factor.
   - cv: Chaos velocity factor, in the range [0, 1].
   - cl: Chaos location factor, in the range [0, 1].
-  - w: Inertia weight. Typically ranges from [0, 1].
+  - inertia: Inertia function.
   - max: Maximum values of the search space.
   - min: Minimum values of the search space.
   - vmax: Maximum velocity.
@@ -95,9 +46,9 @@ class SwarmParams
   var particles: U64 = 50
   var iterations: U64 = 1500
   var precision: F64 = -1
-  var w: F64 = 0
-  var c1: F64 = 0.5
-  var c2: F64 = 0.5
+  var inertia: InertiaFunc = ConstantWeight
+  var c1: F64 = 1.5
+  var c2: F64 = 1.5
   var cv: F64 = -1
   var cl: F64 = -1
   let dims: U64
@@ -121,18 +72,6 @@ primitive Reason
   fun iterations(): String => "Iterations"
   fun unknown(): String => "Unknown"
 
-class Rand
-  """
-  Random helper.
-  """
-  let _rand: MT
-  new create() =>
-    _rand = MT(Time.nanos())
-  fun ref next(): F64 =>
-    _rand.next().f64() / U64.max_value().f64()
-  fun ref between(min: F64, max: F64): F64 =>
-    next() * ((max - min) + min)
-
 class _Particle
   """
   Represents a candidate solution.
@@ -146,12 +85,13 @@ class _Particle
   let _min: Array[F64]
   let _rand: Rand = Rand
   let _fitness: FitnessFunc
+  let _wfunc: InertiaFunc
+  var _w: F64 = 0
   let _s: Swarm ref
   let _c1: F64
   let _c2: F64
   let _cv: F64
   let _cl: F64
-  let _w: F64
   let _precision: F64
 
   new create(s: Swarm ref, fitness: FitnessFunc) =>
@@ -159,7 +99,7 @@ class _Particle
     _c2 = s.params.c2
     _cv = s.params.cv
     _cl = s.params.cl
-    _w = s.params.w
+    _wfunc = s.params.inertia
     _precision = s.params.precision
     _fitness = fitness
     _s = s
@@ -210,6 +150,7 @@ class _Particle
         let g = _s.g(i)
         let vmax = _vmax(i)
         let max = _max(i)
+        _w = _wfunc(_s.params.iterations, _s.epoch, best, _s.gbest, _w)
 
         var v' = (_w *_v(i)) + (_c1 * rp * (p - x)) + (_c2 * rg * (g - x))
         v' = _clamp(v', vmax)
@@ -316,12 +257,12 @@ actor Swarm
   let g: Array[F64]
   let params: SwarmParams val
   var reason: String = Reason.unknown()
+  var epoch: U64 = 0
+  var gbest: F64 = U64.max_value().f64()
   let _listener: SwarmListener
   let _particles: Array[_Particle]
-  var _gbest: F64 = U64.max_value().f64()
   var _updated: Bool = false
   var _stagnation: U64 = 0
-  var _epoch: U64 = 0
 
   new create(params': SwarmParams val, listener: SwarmListener,
     fitness: FitnessFunc)
@@ -340,7 +281,7 @@ actor Swarm
     """
     Solves the optimization problem.
     """
-    _epoch = 0
+    epoch = 0
 
     while _running() do
       for p in _particles.values() do
@@ -351,35 +292,35 @@ actor Swarm
         _stagnation = _stagnation + 1
       end
 
-      _epoch = _epoch + 1
+      epoch = epoch + 1
       _updated = false
     end
 
-    _listener.results(_epoch, _gbest, g, reason)
+    _listener.results(epoch, gbest, g, reason)
 
   fun ref update(x: Array[F64], best: F64) =>
     """
     Invoked when a local fit is found.
     """
-    _listener.local_best(_epoch, best, x)
+    _listener.local_best(epoch, best, x)
 
-    if best < _gbest then
+    if best < gbest then
       x.copy_to(g, 0, 0, x.size())
-      _gbest = best
+      gbest = best
       _updated = true
-      _listener.global_best(_epoch, best, x)
+      _listener.global_best(epoch, best, x)
     end
 
   fun ref _running(): Bool =>
     """
     Returns false if a stop condition was reached.
     """
-    if _gbest <= params.target then
+    if gbest <= params.target then
       reason = Reason.target()
       return false
     end
 
-    if _epoch >= params.iterations then
+    if epoch >= params.iterations then
       reason = Reason.iterations()
       return false
     end

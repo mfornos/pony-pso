@@ -67,11 +67,11 @@ For some difficult or special problems, one can try 100 or 200 particles as well
 
 # Examples
 
-Take a look to the source code in the [examples/](https://github.com/mfornos/pony-pso/tree/master/examples) folder; v.g., running `bin/simple` will print an output close to this:
+Take a look to the source code in the [examples/](https://github.com/mfornos/pony-pso/tree/master/examples) folder; v.g., running `bin/sphere` will print an output close to this:
 
 ```
 PSO Sphere function
-f(x) = Sum(x[]^2)
+f(x) = sum(x[]^2)
 
 Execution Results
 ----------------
@@ -80,7 +80,9 @@ X1:             0
 X2:             0
 X3:             0
 X4:             0
-Epoch:          9
+[...]
+X60:            0
+Epoch:          328
 Reason:         Target
 ```
 

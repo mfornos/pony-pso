@@ -6,15 +6,20 @@ actor Main
 
     env.out.print(
       """
-      PSO - Sphere function:
-      f(x) = Sum(x[]^2)
+      PSO - Sphere:
+      f(x) = sum(x[]^2)
       """
       )
 
     let params = recover val
-      let p = SwarmParams(4)
-      p.max = Array[F64].init(500, 4)
+      let dims: U64 = 60
+      let p = SwarmParams(dims)
+      p.max = Array[F64].init(500, dims)
+      p.min = Array[F64].init(-500, dims)
       p.precision = 0
+      p.stagnation = 1000
+      p.cv = 0.001
+      p.cl = 0.002
       p.c1 = 2
       p.c2 = 2
       consume p
