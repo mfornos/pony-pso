@@ -34,7 +34,7 @@ class LinearWeight is InertiaFunc
     let n = (_max - _min) / iterations
     _max - (n * epoch)
 
-class Chaotic is InertiaFunc
+class ChaoticWeight is InertiaFunc
   """
   Chaotic inertia weight.
   """
