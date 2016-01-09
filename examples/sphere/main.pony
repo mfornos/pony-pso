@@ -3,6 +3,7 @@ use "../../pso"
 actor Main
 
   new create(env: Env) =>
+    let dims: U64 = 60
 
     env.out.print(
       """
@@ -12,7 +13,6 @@ actor Main
       )
 
     let params = recover val
-      let dims: U64 = 60
       let p = SwarmParams(dims)
       p.max = Array[F64].init(500, dims)
       p.min = Array[F64].init(-500, dims)
