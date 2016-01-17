@@ -10,7 +10,7 @@ actor Main
     schwefel(env)
     rosenbrock(env)
 
-fun rosenbrock(env: Env, dims: U64 = 2) =>
+fun rosenbrock(env: Env, dims: USize = 2) =>
   env.out.print(
       """
       Rosenbrock function:
@@ -41,7 +41,7 @@ fun rosenbrock(env: Env, dims: U64 = 2) =>
 
     sw.solve()
 
-fun schwefel(env: Env, dims: U64 = 2) =>
+fun schwefel(env: Env, dims: USize = 2) =>
      env.out.print(
       """
       Schwefel function:
@@ -77,7 +77,7 @@ fun schwefel(env: Env, dims: U64 = 2) =>
 
     sw.solve()
 
-  fun booth(env: Env, dims: U64 = 2) =>
+  fun booth(env: Env, dims: USize = 2) =>
      env.out.print(
       """
       Booth's function:
