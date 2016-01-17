@@ -42,18 +42,18 @@ class SwarmParams
   var min: Array[F64]
   var vmax: Array[F64]
   var target: F64 = 0
-  var stagnation: U64 = 100
-  var particles: U64 = 50
-  var iterations: U64 = 1500
+  var stagnation: USize = 100
+  var particles: USize = 50
+  var iterations: USize = 1500
   var precision: F64 = -1
   var inertia: InertiaFunc = ConstantWeight
   var c1: F64 = 1.4944
   var c2: F64 = 1.4944
   var cv: F64 = -1
   var cl: F64 = -1
-  let dims: U64
+  let dims: USize
 
-  new create(dims': U64) =>
+  new create(dims': USize) =>
     """
     Creates a new instance with the given number of particle dimensions.
     The number of dimensions is determined by the problem to be optimized.
@@ -259,12 +259,12 @@ actor Swarm
   let g: Array[F64]
   let params: SwarmParams val
   var reason: String = Reason.unknown()
-  var epoch: U64 = 0
+  var epoch: USize = 0
   var gbest: F64 = U64.max_value().f64()
   let _listener: SwarmListener
   let _particles: Array[Particle]
   var _updated: Bool = false
-  var _stagnation: U64 = 0
+  var _stagnation: USize = 0
 
   new create(params': SwarmParams val, listener: SwarmListener,
     fitness: FitnessFunc)

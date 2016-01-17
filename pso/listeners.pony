@@ -1,8 +1,8 @@
-interface SwarmListener val
+interface val SwarmListener
   """
   Receives notifications from the simulation.
   """
-  fun results(i: U64, gbest: F64, g: Array[F64], r: String) =>
+  fun results(i: USize, gbest: F64, g: Array[F64], r: String) =>
     """
     Invoked when a termination condition was reached.
 
@@ -12,12 +12,12 @@ interface SwarmListener val
     - r: termination reason
     """
 
-  fun local_best(i: U64, pbest: F64, p: Array[F64]) =>
+  fun local_best(i: USize, pbest: F64, p: Array[F64]) =>
     """
     Invoked when a local best is found.
     """
 
-  fun global_best(i: U64, gbest: F64, g: Array[F64]) =>
+  fun global_best(i: USize, gbest: F64, g: Array[F64]) =>
     """
     Invoked when a global best is found.
     """
@@ -32,7 +32,7 @@ class SwarmLog is SwarmListener
   new val create(env: Env) =>
     _env = env
 
-  fun results(i: U64, gbest: F64, g: Array[F64], r: String) =>
+  fun results(i: USize, gbest: F64, g: Array[F64], r: String) =>
     _env.out.print("Execution Results")
     _env.out.print("-----------------")
     _env.out.print("Best:\t\t" + gbest.string())

@@ -1,10 +1,10 @@
-interface FitnessFunc val
+interface val FitnessFunc
   """
   Contract for the cost function to be minimized.
   """
   fun apply(x: Array[F64]): F64 ?
 
-interface InertiaFunc val
+interface val InertiaFunc
   """
   Contract for calculating the inertia weight.
   """

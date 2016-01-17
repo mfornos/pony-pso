@@ -3,7 +3,7 @@ use "../../pso"
 actor Main
 
   new create(env: Env) =>
-    let dims: U64 = 60
+    let dims: USize = 60
 
     env.out.print(
       """
