@@ -6,7 +6,8 @@ PSO is a population based global stochastic optimization technique inspired by s
 
 # Building
 
-This software depends on [ponyc](http://www.ponylang.org/) version 0.2.1, the Pony language compiler.
+This software depends on the development version of ponyc, the [Pony language](http://www.ponylang.org/) compiler.
+You should build and install the compiler from ponyc's [source repositiory](https://github.com/CausalityLtd/ponyc).
 
 Execute `./build.sh -e` to compile all the examples.
 You will find the executables in the `bin/` folder.
