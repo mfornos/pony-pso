@@ -1,6 +1,6 @@
 # Pony package for Particle Swarm Optimization
 
-An impelementation of the Particle Swarm Optimization algorithm[1] in Pony, with support for dissipative variations[2]
+An implementation of the Particle Swarm Optimization algorithm[1] in Pony, with support for dissipative variations[2]
 and inertia weight strategies[3].
 PSO is a population based global stochastic optimization technique inspired by social behavior of bird flocking or fish schooling.
 
